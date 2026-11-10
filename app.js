@@ -4,8 +4,15 @@
   var CFG = window.X_CONFIG || {};
   var sb = CFG.supabaseUrl && CFG.supabaseKey && window.supabase ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey) : null;
 
-  var TRIGGERS = ["Aburrimiento", "Estrés", "Soledad", "Cansancio", "Ansiedad", "De noche en la cama", "Redes sociales", "Tiempo libre sin plan", "Tristeza", "Otro"];
+  var TRIGGERS = ["Aburrimiento", "Estrés", "Soledad", "Cansancio", "Ansiedad", "De noche en la cama", "Al despertar", "Solo en casa", "Redes sociales", "Contenido sugerente", "Tiempo libre sin plan", "Tristeza", "Otro"];
+  // Qué fue: X cuenta días sin porno y sin masturbación. Cualquiera de las dos reinicia el contador.
+  var WHAT = [{ v: "porno", label: "Porno" }, { v: "masturbacion", label: "Masturbación" }];
+  function whatLabel(list) {
+    return WHAT.filter(function (w) { return (list || []).indexOf(w.v) >= 0; }).map(function (w) { return w.label.toLowerCase(); }).join(" y ");
+  }
   var ALTS = [
+    "Levántate de la cama y sal del cuarto. No te quedes acostado con el impulso.",
+    "Ve a un lugar donde haya gente: la sala, la cocina, la calle.",
     "Sal a caminar 10 minutos, aunque sea alrededor de la casa.",
     "Date una ducha. Si puedes, que el final sea con agua fría.",
     "Haz 20 sentadillas o flexiones ahora mismo.",
@@ -137,6 +144,7 @@
     $("app").innerHTML =
       '<section class="hero">' +
         '<h1 class="count"><span class="num" id="cNum">0</span><span class="unit" id="cUnit">días</span></h1>' +
+        '<p class="free">sin porno ni masturbación</p>' +
         '<p class="since" id="cSince"></p>' +
         '<div class="goal"><div class="goal-head"><span id="gText"></span><span id="gLeft"></span></div>' +
         '<div class="track"><span id="gBar"></span></div></div>' +
@@ -191,6 +199,10 @@
     var trig = {};
     recent.forEach(function (e) { (e.triggers || []).forEach(function (t) { trig[t] = (trig[t] || 0) + 1; }); });
     var trigList = Object.keys(trig).map(function (k) { return { label: k, n: trig[k] }; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 5);
+    var whatList = WHAT.map(function (w) {
+      return { label: w.label, n: recent.filter(function (e) { return (e.what || []).indexOf(w.v) >= 0; }).length };
+    });
+    var hasWhat = whatList.some(function (x) { return x.n > 0; });
 
     // Si hay empate se nombran todos los que empatan (máximo dos).
     function tops(list, key) {
@@ -212,6 +224,7 @@
     return h + '<p class="insight">' + insight + "</p>" +
       '<p class="subhead">Momento del día</p>' + bars(byMoment) +
       (trigList.length ? '<p class="subhead">Qué lo provoca</p>' + bars(trigList) : "") +
+      (hasWhat ? '<p class="subhead">Hacia qué</p>' + bars(whatList) : "") +
       "</section>";
   }
 
@@ -222,6 +235,8 @@
     return h + '<ul class="history">' + list.map(function (e) {
       var relapse = e.kind === "relapse";
       var meta = [fmtWhen(Date.parse(e.at))];
+      var w = whatLabel(e.what);
+      if (w) meta.push(w);
       if (e.intensity) meta.push("intensidad " + e.intensity + "/5");
       if (e.triggers && e.triggers.length) meta.push(e.triggers.join(", "));
       var armed = S.armedDel === e.id;
@@ -239,7 +254,8 @@
     var uid = S.uid;
     return Promise.all([
       sb.from("x_profiles").select("started_at,reasons").eq("user_id", uid).maybeSingle(),
-      sb.from("x_events").select("id,kind,at,intensity,triggers,note").eq("user_id", uid).order("at", { ascending: false }).limit(2000)
+      // "*" para que funcione aunque aún no exista la columna "what".
+      sb.from("x_events").select("*").eq("user_id", uid).order("at", { ascending: false }).limit(2000)
     ]).then(function (r) {
       if (uid !== S.uid) return;
       S.profile = must(r[0]);
@@ -254,6 +270,18 @@
       if (tableMissing(e)) S.missing = true; else S.loadError = true;
       render();
     });
+  }
+
+  // Si la base aún no tiene la columna "what", guarda sin ella en vez de fallar.
+  function insertEvent(row) {
+    return sb.from("x_events").insert(row).then(function (res) {
+      var msg = String((res.error && res.error.message) || "");
+      if (res.error && /what/.test(msg) && /column|schema/i.test(msg)) {
+        var copy = {}; Object.keys(row).forEach(function (k) { if (k !== "what") copy[k] = row[k]; });
+        return sb.from("x_events").insert(copy);
+      }
+      return res;
+    }).then(must);
   }
 
   function run(fn) {
@@ -280,6 +308,11 @@
   function picked(name) {
     return Array.prototype.map.call(document.querySelectorAll('#sheetForm [data-group="' + name + '"] .chip[aria-pressed="true"]'),
       function (b) { return b.getAttribute("data-value"); });
+  }
+  function whatChips() {
+    return '<div class="chips" data-group="what">' + WHAT.map(function (w) {
+      return '<button type="button" class="chip" aria-pressed="false" data-value="' + w.v + '">' + w.label + "</button>";
+    }).join("") + "</div>";
   }
   function scaleHtml() {
     var h = '<div class="scale chips" data-group="intensity" data-single="1">';
@@ -334,8 +367,8 @@
         '<div class="actions"><button class="btn primary" type="submit">Guardar contraseña</button></div>';
     } else if (kind === "onboarding") {
       title = "Empecemos";
-      body = '<p class="lede">X cuenta tus días, te ayuda cuando llega un impulso y te muestra tus patrones. Todo es privado.</p>' +
-        '<div class="field"><span class="lbl">¿Desde cuándo llevas sin hacerlo?</span><div class="choice">' +
+      body = '<p class="lede">X cuenta tus días sin porno ni masturbación, te ayuda cuando llega un impulso y te muestra tus patrones. Todo es privado.</p>' +
+        '<div class="field"><span class="lbl">¿Desde cuándo llevas sin porno ni masturbación?</span><div class="choice">' +
         '<label><input type="radio" name="since" value="today" checked> Empiezo hoy</label>' +
         '<label><input type="radio" name="since" value="date"> Desde una fecha</label></div>' +
         '<input id="fSince" type="date" max="' + localInputValue(Date.now()).slice(0, 10) + '" aria-label="Fecha de inicio" hidden></div>' +
@@ -350,6 +383,7 @@
     } else if (kind === "urge") {
       title = "Registrar impulso";
       body = '<p class="lede">' + (opts.fromSos ? "Bien hecho. Anota cómo fue: te ayuda a ver cuándo y por qué aparecen." : "Anotarlo te ayuda a ver cuándo y por qué aparecen. Cuenta como impulso superado.") + "</p>" +
+        '<div class="field"><span class="lbl">¿Ganas de qué?</span>' + whatChips() + "</div>" +
         '<div class="field"><span class="lbl">¿Qué tan fuerte fue?</span>' + scaleHtml() + '<span class="hint">1 = leve · 5 = muy fuerte</span></div>' +
         '<div class="field"><span class="lbl">¿Qué lo provocó?</span>' + chipsHtml(TRIGGERS, "triggers") + "</div>" +
         '<div class="field"><label for="fNote">Nota (opcional)</label><textarea id="fNote" maxlength="2000" placeholder="Qué estabas haciendo, cómo te sentías, qué te ayudó…"></textarea></div>' + MSG +
@@ -357,6 +391,7 @@
     } else if (kind === "relapse") {
       title = "Tuve una recaída";
       body = '<div class="calm-box">Pasa, y no borra lo que avanzaste: tu mejor racha y tu historial se quedan. Lo que importa ahora es entender qué pasó y volver a empezar.</div>' +
+        '<div class="field"><span class="lbl">¿Qué pasó?</span>' + whatChips() + '<span class="hint">Marca una o las dos. Cualquiera reinicia el contador.</span></div>' +
         '<div class="field"><label for="fAt">¿Cuándo fue?</label><input id="fAt" type="datetime-local" value="' + localInputValue(Date.now()) + '" max="' + localInputValue(Date.now()) + '"></div>' +
         '<div class="field"><span class="lbl">¿Qué lo provocó?</span>' + chipsHtml(TRIGGERS, "triggers") + "</div>" +
         '<div class="field"><label for="fNote">¿Qué pasó antes? ¿Qué harías distinto la próxima vez?</label><textarea id="fNote" maxlength="2000"></textarea></div>' + MSG +
@@ -431,18 +466,20 @@
     }
     if (kind === "urge") {
       var intensity = Number(picked("intensity")[0]) || null;
-      var row = { user_id: S.uid, kind: "urge", at: nowIso(), intensity: intensity, triggers: picked("triggers"), note: $("fNote").value.trim() || null };
+      var row = { user_id: S.uid, kind: "urge", at: nowIso(), intensity: intensity, what: picked("what"), triggers: picked("triggers"), note: $("fNote").value.trim() || null };
       run(function () {
-        return sb.from("x_events").insert(row).then(must).then(function () { closeSheet(); toast("Impulso superado. Sigue así."); });
+        return insertEvent(row).then(function () { closeSheet(); toast("Impulso superado. Sigue así."); });
       });
       return;
     }
     if (kind === "relapse") {
       var at = $("fAt").value ? new Date($("fAt").value).getTime() : Date.now();
       if (at > Date.now() + 60000) { formMsg("err", "La fecha no puede ser futura."); return; }
-      var r = { user_id: S.uid, kind: "relapse", at: new Date(at).toISOString(), triggers: picked("triggers"), note: $("fNote").value.trim() || null };
+      var what = picked("what");
+      if (!what.length) { formMsg("err", "Marca qué pasó: porno, masturbación o las dos."); return; }
+      var r = { user_id: S.uid, kind: "relapse", at: new Date(at).toISOString(), what: what, triggers: picked("triggers"), note: $("fNote").value.trim() || null };
       run(function () {
-        return sb.from("x_events").insert(r).then(must).then(function () { closeSheet(); toast("Registrado. Tu nuevo comienzo empieza ahora."); });
+        return insertEvent(r).then(function () { closeSheet(); toast("Registrado. Tu nuevo comienzo empieza ahora."); });
       });
     }
   });

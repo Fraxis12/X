@@ -18,6 +18,9 @@ create table if not exists public.x_events (
   note        text check (char_length(note) <= 2000),
   created_at  timestamptz not null default now()
 );
+-- Qué fue: 'porno', 'masturbacion' o las dos.
+alter table public.x_events add column if not exists what text[] not null default '{}'
+  check (what <@ array['porno', 'masturbacion']::text[]);
 create index if not exists x_events_user_at on public.x_events (user_id, at desc);
 
 grant select, insert, update, delete on public.x_profiles, public.x_events to authenticated;
