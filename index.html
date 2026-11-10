@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>X</title>
+  <meta name="description" content="X">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E1315">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand"><img class="mark" src="favicon.svg" alt="" width="34" height="34"><span class="wordmark">X</span></div>
+      <div id="authArea"></div>
+    </header>
+    <main id="app" aria-live="polite"></main>
+  </div>
+
+  <!-- Modo impulso -->
+  <div id="sosLayer" class="sos-layer" role="dialog" aria-modal="true" aria-labelledby="sosTitle" hidden>
+    <div class="sos-in">
+      <div class="sos-bar">
+        <button class="x" type="button" data-close="sos" aria-label="Salir"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
+      </div>
+      <h2 id="sosTitle">Esto va a pasar.</h2>
+      <p class="sos-sub">Un impulso sube, llega a su punto más alto y baja. Quédate aquí y respira conmigo unos minutos.</p>
+      <div class="breath" aria-hidden="true"><div class="breath-circle" id="breathCircle"></div></div>
+      <p class="breath-text" id="breathText" aria-live="polite">Inhala</p>
+      <p class="sos-timer" id="sosTimer" aria-live="off">10:00</p>
+      <blockquote class="sos-reason" id="sosReason" hidden></blockquote>
+      <section class="sos-alts">
+        <h3>Mientras tanto, haz una de estas cosas</h3>
+        <ul id="sosAlts"></ul>
+      </section>
+      <div class="actions center">
+        <button class="btn primary big" type="button" data-action="sos-done">Ya pasó, lo superé</button>
+        <button class="btn" type="button" data-close="sos">Salir sin registrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hojas -->
+  <div id="sheetLayer" hidden>
+    <div class="scrim" data-close="sheet"></div>
+    <aside class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-bar">
+        <h2 id="sheetTitle"></h2>
+        <button class="x" type="button" data-close="sheet" aria-label="Cerrar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
+      </div>
+      <form id="sheetForm" class="section" novalidate></form>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
