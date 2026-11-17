@@ -33,9 +33,33 @@
   var ICONS = {
     wave: '<path d="M3 13c2.2 0 2.2-3 4.5-3s2.3 3 4.5 3 2.2-3 4.5-3 2.3 3 4.5 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M3 17.5c2.2 0 2.2-3 4.5-3s2.3 3 4.5 3 2.2-3 4.5-3 2.3 3 4.5 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" opacity=".55"/>',
     plus: '<path d="M12 5.5v13M5.5 12h13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',
-    minus: '<path d="M6 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>'
+    minus: '<path d="M6 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',
+    link: '<path d="M10.5 7H8a5 5 0 0 0 0 10h2.5M13.5 7H16a5 5 0 0 1 0 10h-2.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M12 3v2M12 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
   };
   function icon(n) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[n] + "</svg>"; }
+
+  // Cadena rota: eslabones de hierro que se vuelven dorados hacia el punto donde se rompe.
+  // Con birds = true, salen pájaros volando desde la ruptura (pantalla de bienvenida).
+  function brokenChain(birds) {
+    function face(x) { return '<rect x="' + x + '" y="20" width="34" height="24" rx="12"/>'; }
+    function bar(a, b) { return '<path d="M' + a + ' 32H' + b + '"/>'; }
+    var left = face(6) + face(48) + face(90) + bar(32, 56) + bar(74, 98) + bar(116, 136) +
+      '<path d="M151 20h-8a12 12 0 0 0 0 24h8"/>';
+    var right = face(196) + face(238) + face(280) + bar(264, 288) + bar(222, 246) + bar(184, 204) +
+      '<path d="M169 20h8a12 12 0 0 1 0 24h-8"/>';
+    var sparks = '<path d="M160 6v8M160 50v8M147 9l4 6M173 9l-4 6M147 55l4-6M173 55l-4-6"/>';
+    var flock = birds ? '<g class="ch-birds" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path class="b1" d="M150-8q5-6 10 0q5-6 10 0"/><path class="b2" d="M182-26q4-5 8 0q4-5 8 0"/>' +
+      '<path class="b3" d="M124-30q3.5-4 7 0q3.5-4 7 0"/><path class="b4" d="M206-50q3-3.5 6 0q3-3.5 6 0"/></g>' : "";
+    return '<svg class="chain' + (birds ? " with-birds" : "") + '" viewBox="0 ' + (birds ? "-60 320 124" : "0 320 64") + '" aria-hidden="true">' +
+      '<defs><linearGradient id="chg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="320" y2="0">' +
+      '<stop offset="0" style="stop-color:var(--iron)"/><stop offset=".36" style="stop-color:var(--iron-hi)"/>' +
+      '<stop offset=".47" style="stop-color:var(--gold)"/><stop offset=".53" style="stop-color:var(--gold)"/>' +
+      '<stop offset=".64" style="stop-color:var(--iron-hi)"/><stop offset="1" style="stop-color:var(--iron)"/></linearGradient></defs>' +
+      '<g fill="none" stroke="url(#chg)" stroke-width="5" stroke-linecap="round">' +
+      '<g class="ch-l">' + left + '</g><g class="ch-r">' + right + "</g></g>" +
+      '<g class="ch-spark" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">' + sparks + "</g>" + flock + "</svg>";
+  }
 
   var S = {
     authReady: false, uid: null, userMeta: {},
@@ -118,7 +142,7 @@
     if (!sb) { el.innerHTML = '<p class="notice">Falta configurar la conexión en config.js.</p>'; return; }
     if (!S.authReady) { el.innerHTML = '<p class="notice">Cargando…</p>'; return; }
     if (!S.uid) {
-      el.innerHTML = '<section class="welcome"><h1>Un día a la vez.</h1>' +
+      el.innerHTML = '<section class="welcome">' + brokenChain(true) + '<p class="kicker">Rompe las cadenas</p><h1>Un día a la vez.</h1>' +
         "<p>X te acompaña a dejar un hábito que ya no quieres: cuenta tus días, te sostiene en los momentos difíciles y te muestra tus patrones. Es privado: solo tú lo ves.</p>" +
         '<div class="actions"><button class="btn primary big" type="button" data-action="signup">Crear cuenta</button>' +
         '<button class="btn big" type="button" data-action="login">Ya tengo cuenta</button></div></section>';
@@ -128,7 +152,7 @@
     if (S.missing) { el.innerHTML = '<p class="notice">Falta crear las tablas de X en la base de datos (supabase.sql).</p>'; return; }
     if (S.loadError) { el.innerHTML = '<p class="notice">No se pudieron cargar tus datos. Revisa tu conexión y recarga la página.</p>'; return; }
     if (!S.profile) {
-      el.innerHTML = '<section class="welcome"><h1>Empecemos.</h1><p>Dos preguntas rápidas y listo: desde cuándo cuentas y por qué quieres dejarlo.</p>' +
+      el.innerHTML = '<section class="welcome">' + brokenChain(true) + '<p class="kicker">Tu camino a la libertad</p><h1>Empecemos.</h1><p>Dos preguntas rápidas y listo: desde cuándo cuentas y por qué quieres dejarlo.</p>' +
         '<div class="actions"><button class="btn primary big" type="button" data-action="onboarding">Empezar</button></div></section>';
       return;
     }
@@ -143,8 +167,9 @@
 
     $("app").innerHTML =
       '<section class="hero">' +
+        brokenChain(false) +
         '<h1 class="count"><span class="num" id="cNum">0</span><span class="unit" id="cUnit">días</span></h1>' +
-        '<p class="free">sin porno ni masturbación</p>' +
+        '<p class="free">' + icon("link") + "libre de porno y masturbación</p>" +
         '<p class="since" id="cSince"></p>' +
         '<div class="goal"><div class="goal-head"><span id="gText"></span><span id="gLeft"></span></div>' +
         '<div class="track"><span id="gBar"></span></div></div>' +
