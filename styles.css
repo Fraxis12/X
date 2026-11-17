@@ -31,7 +31,6 @@
   /* Eslabones para barras de progreso (gris = cadena, dorado = tramo ya liberado). */
   --links-iron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='14'%3E%3Crect x='2' y='2.5' width='13' height='9' rx='4.5' fill='none' stroke='%2339445A' stroke-width='2.2'/%3E%3Cpath d='M12 7h10' stroke='%2339445A' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
   --links-gold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='14'%3E%3Crect x='2' y='2.5' width='13' height='9' rx='4.5' fill='none' stroke='%23F6B44C' stroke-width='2.2'/%3E%3Cpath d='M12 7h10' stroke='%23F6B44C' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
-  --link-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.5 7H8a5 5 0 0 0 0 10h2.5M13.5 7H16a5 5 0 0 1 0 10h-2.5' stroke='%23000' stroke-width='2.4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
 
   --f-display: "Instrument Serif", "Georgia", serif;
   --f-ui: "Manrope", "Segoe UI", system-ui, sans-serif;
@@ -64,7 +63,7 @@ button { cursor: pointer; }
 .ic { width: 1.15em; height: 1.15em; flex: none; }
 
 .wrap {
-  max-width: 760px;
+  max-width: 1120px;
   margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -193,12 +192,11 @@ button { cursor: pointer; }
 }
 @media (max-width: 420px) { .panel { padding: 18px 16px 20px; } }
 .panel h2 { margin: 0; font-size: 19px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-.panel h2::before {
-  content: ""; width: 20px; height: 20px; flex: none;
-  background: var(--gold);
-  -webkit-mask: var(--link-mask) center / contain no-repeat; mask: var(--link-mask) center / contain no-repeat;
-}
-.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.panel h2 .ic { width: 22px; height: 22px; color: var(--gold); }
+.panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.panel-head .link { flex: none; margin-top: 2px; }
+.ph-t { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.panel-sub { margin: 0; padding-left: 32px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
 .reasons { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .reasons li { font-family: var(--f-display); font-size: 24px; line-height: 1.25; padding-left: 14px; border-left: 2px solid rgba(246, 180, 76, 0.5); }
 .reasons li::before { content: "“"; color: var(--gold); margin-right: 2px; }
@@ -244,7 +242,7 @@ button { cursor: pointer; }
 .small { font-size: 13px; color: var(--muted); }
 
 /* ---------- Welcome ---------- */
-.welcome { display: flex; flex-direction: column; gap: 18px; padding-top: 5vh; }
+.welcome { display: flex; flex-direction: column; gap: 18px; padding-top: 5vh; max-width: 760px; }
 .welcome .chain { max-width: 360px; margin-bottom: 4px; }
 .kicker { margin: 0; color: var(--gold) !important; font-size: 13px !important; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
 .welcome h1 { margin: -6px 0 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(48px, 10vw, 80px); line-height: 1.02; text-wrap: balance; }
@@ -360,3 +358,77 @@ textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
   padding: 11px 18px; border-radius: 999px; font-size: 14.5px; font-weight: 700;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
+
+/* ---------- Dashboard: dos columnas en pantallas grandes ---------- */
+.dash {
+  display: grid; gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "hero" "faith" "main";
+}
+.d-hero { grid-area: hero; }
+.faith { grid-area: faith; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.d-main { grid-area: main; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+@media (min-width: 960px) {
+  .dash { grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "hero faith" "main faith"; column-gap: 32px; align-items: start; }
+  .faith { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; scrollbar-width: thin; }
+}
+.hero-help { margin: -8px 0 0; font-size: 13.5px; color: var(--muted); }
+.hero-help b { color: var(--soft); font-weight: 600; }
+.quick .btn .ic { color: var(--sky); }
+
+/* ---------- Versículo, oración, paso del día ---------- */
+.verse { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.verse blockquote { margin: 0; font-family: var(--f-display); font-size: 23px; line-height: 1.32; color: var(--ink); }
+.verse blockquote::before { content: "«"; color: var(--gold); }
+.verse blockquote::after { content: "»"; color: var(--gold); }
+.verse figcaption { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.verse .ref { color: var(--gold); font-weight: 700; font-size: 14.5px; }
+.verse .ver { color: var(--muted); font-size: 11.5px; letter-spacing: 0.08em; }
+.verse-card {
+  background:
+    radial-gradient(420px 220px at 100% 0, rgba(246, 180, 76, 0.14), transparent 70%),
+    linear-gradient(180deg, rgba(27, 31, 42, 0.95), rgba(16, 20, 30, 0.95));
+  border-color: rgba(246, 180, 76, 0.28);
+}
+.prayer { margin: 0; font-family: var(--f-display); font-style: italic; font-size: 19px; line-height: 1.45; color: var(--soft); }
+.today-text { margin: 0; font-size: 16px; font-weight: 500; }
+.today-btn { align-self: flex-start; }
+.today-btn .ic { color: var(--muted); }
+.today-btn[aria-pressed="true"] { background: rgba(124, 201, 240, 0.12); border-color: rgba(124, 201, 240, 0.45); color: var(--sky); }
+.today-btn[aria-pressed="true"] .ic { color: var(--sky); }
+
+/* ---------- Metas (eslabones) ---------- */
+.goals { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+.goals li {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-height: 62px; padding: 8px 6px; border-radius: 999px; text-align: center;
+  border: 2px solid var(--iron); color: var(--muted);
+}
+.goals .g-num { font-family: var(--f-display); font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums; }
+.goals .g-lbl { font-size: 10.5px; line-height: 1.2; }
+.goals li.got { border-color: var(--gold); color: var(--gold); background: rgba(246, 180, 76, 0.07); box-shadow: 0 0 14px rgba(246, 180, 76, 0.18); }
+.goals li.got .g-lbl { color: var(--soft); }
+.goals li.next { border-style: dashed; border-color: rgba(246, 180, 76, 0.7); color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .goals li.next { animation: nextpulse 2.6s ease-in-out infinite; }
+  @keyframes nextpulse { 0%, 100% { box-shadow: 0 0 0 rgba(246, 180, 76, 0); } 50% { box-shadow: 0 0 16px rgba(246, 180, 76, 0.3); } }
+}
+
+/* ---------- Bienvenida: qué incluye ---------- */
+.features { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+@media (min-width: 720px) { .features { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.features li { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 18px; background: rgba(19, 26, 39, 0.8); border: 1px solid var(--line); }
+.features .ic { width: 24px; height: 24px; color: var(--gold); margin-top: 2px; }
+.features div { display: flex; flex-direction: column; gap: 2px; }
+.features b { font-weight: 700; }
+.features span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+.welcome-verse { padding: 18px 20px; border-left: 3px solid var(--gold); background: rgba(246, 180, 76, 0.05); border-radius: 0 16px 16px 0; }
+
+/* ---------- Recaída y modo impulso ---------- */
+.cb-verse { margin: 10px 0 0; font-family: var(--f-display); font-style: italic; font-size: 17px; line-height: 1.4; color: var(--ink); }
+.cb-verse span { font-family: var(--f-ui); font-style: normal; font-size: 12.5px; font-weight: 700; color: var(--sky); white-space: nowrap; }
+.sos-verse { margin: 0; align-self: stretch; padding: 18px; border-radius: 18px; background: rgba(246, 180, 76, 0.06); border: 1px solid rgba(246, 180, 76, 0.28); }
+.sos-verse blockquote { margin: 0; font-family: var(--f-display); font-size: 22px; line-height: 1.35; }
+.sos-verse figcaption { margin-top: 8px; color: var(--gold); font-weight: 700; font-size: 14px; }
+.sos-prayer { align-self: stretch; display: flex; flex-direction: column; gap: 6px; }
+.sos-prayer p:last-child { margin: 0; font-family: var(--f-display); font-style: italic; font-size: 19px; line-height: 1.45; color: var(--soft); }

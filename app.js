@@ -21,8 +21,63 @@
     "Deja el celular en otra habitación y sal del cuarto.",
     "Escribe en papel lo que estás sintiendo.",
     "Pon música y ordena algo pequeño: tu escritorio, tu cama.",
-    "Lee 5 páginas de un libro."
+    "Lee 5 páginas de un libro.",
+    "Ora en voz baja, con tus palabras: «Señor, ayúdame ahora».",
+    "Abre la Biblia en un salmo y léelo en voz alta."
   ];
+  // Versículos (Reina-Valera 1960). tempt = útil en el momento del impulso.
+  var VERSES = [
+    { r: "1 Corintios 10:13", tempt: true, t: "No os ha sobrevenido ninguna tentación que no sea humana; pero fiel es Dios, que no os dejará ser tentados más de lo que podéis resistir, sino que dará también juntamente con la tentación la salida, para que podáis soportar." },
+    { r: "Gálatas 5:1", t: "Estad, pues, firmes en la libertad con que Cristo nos hizo libres, y no estéis otra vez sujetos al yugo de esclavitud." },
+    { r: "Juan 8:36", t: "Así que, si el Hijo os libertare, seréis verdaderamente libres." },
+    { r: "Filipenses 4:13", tempt: true, t: "Todo lo puedo en Cristo que me fortalece." },
+    { r: "Salmos 51:10", t: "Crea en mí, oh Dios, un corazón limpio, y renueva un espíritu recto dentro de mí." },
+    { r: "Lamentaciones 3:22-23", t: "Por la misericordia de Jehová no hemos sido consumidos, porque nunca decayeron sus misericordias. Nuevas son cada mañana; grande es tu fidelidad." },
+    { r: "2 Corintios 5:17", t: "De modo que si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron; he aquí todas son hechas nuevas." },
+    { r: "Santiago 4:7", tempt: true, t: "Someteos, pues, a Dios; resistid al diablo, y huirá de vosotros." },
+    { r: "Isaías 41:10", tempt: true, t: "No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia." },
+    { r: "Romanos 8:1", t: "Ahora, pues, ninguna condenación hay para los que están en Cristo Jesús, los que no andan conforme a la carne, sino conforme al Espíritu." },
+    { r: "1 Juan 1:9", t: "Si confesamos nuestros pecados, él es fiel y justo para perdonar nuestros pecados, y limpiarnos de toda maldad." },
+    { r: "Salmos 119:9", t: "¿Con qué limpiará el joven su camino? Con guardar tu palabra." },
+    { r: "Mateo 26:41", tempt: true, t: "Velad y orad, para que no entréis en tentación; el espíritu a la verdad está dispuesto, pero la carne es débil." },
+    { r: "2 Timoteo 2:22", tempt: true, t: "Huye también de las pasiones juveniles, y sigue la justicia, la fe, el amor y la paz, con los que de corazón limpio invocan al Señor." },
+    { r: "Proverbios 24:16", t: "Porque siete veces cae el justo, y vuelve a levantarse; mas los impíos caerán en el mal." },
+    { r: "Isaías 40:31", t: "Pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán." },
+    { r: "Salmos 46:1", tempt: true, t: "Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones." },
+    { r: "Hebreos 4:15-16", tempt: true, t: "Porque no tenemos un sumo sacerdote que no pueda compadecerse de nuestras debilidades, sino uno que fue tentado en todo según nuestra semejanza, pero sin pecado. Acerquémonos, pues, confiadamente al trono de la gracia, para alcanzar misericordia y hallar gracia para el oportuno socorro." },
+    { r: "Romanos 12:2", t: "No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento, para que comprobéis cuál sea la buena voluntad de Dios, agradable y perfecta." },
+    { r: "Mateo 5:8", t: "Bienaventurados los de limpio corazón, porque ellos verán a Dios." },
+    { r: "2 Corintios 12:9", tempt: true, t: "Bástate mi gracia; porque mi poder se perfecciona en la debilidad." },
+    { r: "Filipenses 1:6", t: "Estando persuadido de esto, que el que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo." },
+    { r: "Salmos 34:18", t: "Cercano está Jehová a los quebrantados de corazón; y salva a los contritos de espíritu." },
+    { r: "1 Corintios 6:19-20", t: "¿O ignoráis que vuestro cuerpo es templo del Espíritu Santo, el cual está en vosotros, el cual tenéis de Dios, y que no sois vuestros? Porque habéis sido comprados por precio; glorificad, pues, a Dios en vuestro cuerpo y en vuestro espíritu, los cuales son de Dios." },
+    { r: "Romanos 6:14", t: "Porque el pecado no se enseñoreará de vosotros; pues no estáis bajo la ley, sino bajo la gracia." },
+    { r: "Salmos 37:5", t: "Encomienda a Jehová tu camino, y confía en él; y él hará." },
+    { r: "Josué 1:9", tempt: true, t: "Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en dondequiera que vayas." }
+  ];
+  var PRAYERS = [
+    "Señor, hoy te entrego mis ojos, mi mente y mi cuerpo. Cuando llegue la tentación, recuérdame que no estoy solo y muéstrame la salida que prometiste. Amén.",
+    "Padre, gracias por un día más. No quiero vivir atado. Llena con tu presencia los momentos en que me siento vacío, aburrido o solo. Amén.",
+    "Jesús, tú fuiste tentado y venciste. Dame tu fuerza para huir de lo que me hace daño y buscar lo que es bueno. Amén.",
+    "Dios mío, si hoy caigo, ayúdame a levantarme rápido y a no esconderme de ti. Tu misericordia es nueva cada mañana. Amén.",
+    "Espíritu Santo, renueva mi mente. Cambia los pensamientos que me encadenan por pensamientos de verdad, de paz y de pureza. Amén.",
+    "Señor, crea en mí un corazón limpio. Enséñame a ver a las personas como tú las ves, con respeto y con amor. Amén.",
+    "Padre, pongo en tus manos este día y esta noche. Cuida mis horas de soledad y mis momentos de cansancio. Amén."
+  ];
+  var TODAY = [
+    "Lee un salmo completo. Prueba con el Salmo 51 o el 139.",
+    "Escribe tres cosas por las que hoy le das gracias a Dios.",
+    "Deja el celular fuera del cuarto a la hora de dormir.",
+    "Haz 20 minutos de ejercicio o sal a caminar.",
+    "Escríbele a un amigo o a alguien de tu iglesia y pregúntale cómo está.",
+    "Ora cinco minutos en silencio antes de dormir.",
+    "Memoriza el versículo de hoy y repítelo en la noche.",
+    "Sal a caminar sin audífonos y sin pantalla, solo tú y Dios.",
+    "Ayuda a alguien en algo pequeño sin que te lo pida.",
+    "Lee un capítulo de Proverbios despacio.",
+    "Revisa qué apps o cuentas te hacen tropezar y silencia o borra una."
+  ];
+  var MNAMES = { 1: "Primer día", 7: "Una semana", 14: "Dos semanas", 21: "Tres semanas", 30: "Un mes", 60: "Dos meses", 90: "Tres meses", 120: "Cuatro meses", 180: "Medio año", 270: "Nueve meses", 365: "Un año", 730: "Dos años" };
   var MILESTONES = [1, 3, 7, 14, 21, 30, 45, 60, 90, 120, 180, 270, 365, 500, 730, 1000];
   var MOMENTS = [
     { key: "madrugada", label: "Madrugada (0–6 h)", from: 0, to: 6 },
@@ -36,6 +91,17 @@
     minus: '<path d="M6 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',
     link: '<path d="M10.5 7H8a5 5 0 0 0 0 10h2.5M13.5 7H16a5 5 0 0 1 0 10h-2.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M12 3v2M12 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
   };
+  (function () {
+    function s(d, extra) { return '<path d="' + d + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' + (extra || ""); }
+    var ring = '<circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2" fill="none"/>';
+    ICONS.book = s("M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2zM12 6.5v13");
+    ICONS.cross = s("M12 3.5v17M7 8.5h10");
+    ICONS.check = ring + s("M8.5 12.2l2.4 2.4 4.6-5");
+    ICONS.heart = s("M12 19.5s-7-4.3-7-9.5a3.8 3.8 0 0 1 7-2.1A3.8 3.8 0 0 1 19 10c0 5.2-7 9.5-7 9.5z");
+    ICONS.chart = s("M5 19v-7M12 19V5M19 19v-10");
+    ICONS.clock = ring + s("M12 7.5V12l3 2");
+    ICONS.list = s("M9.5 7H19M9.5 12H19M9.5 17H19M5 7h.01M5 12h.01M5 17h.01");
+  })();
   function icon(n) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[n] + "</svg>"; }
 
   // Cadena rota: eslabones de hierro que se vuelven dorados hacia el punto donde se rompe.
@@ -143,9 +209,15 @@
     if (!S.authReady) { el.innerHTML = '<p class="notice">Cargando…</p>'; return; }
     if (!S.uid) {
       el.innerHTML = '<section class="welcome">' + brokenChain(true) + '<p class="kicker">Rompe las cadenas</p><h1>Un día a la vez.</h1>' +
-        "<p>X te acompaña a dejar un hábito que ya no quieres: cuenta tus días, te sostiene en los momentos difíciles y te muestra tus patrones. Es privado: solo tú lo ves.</p>" +
+        "<p>X te acompaña a dejar un hábito que ya no quieres, con la ayuda de Dios: cuenta tus días, te sostiene en los momentos difíciles y te muestra tus patrones. Es privado: solo tú lo ves.</p>" +
         '<div class="actions"><button class="btn primary big" type="button" data-action="signup">Crear cuenta</button>' +
-        '<button class="btn big" type="button" data-action="login">Ya tengo cuenta</button></div></section>';
+        '<button class="btn big" type="button" data-action="login">Ya tengo cuenta</button></div>' +
+        '<ul class="features">' +
+          "<li>" + icon("link") + "<div><b>Cuenta tus días libres</b><span>Tu racha, tus metas y tu mejor marca, siempre a la vista.</span></div></li>" +
+          "<li>" + icon("wave") + "<div><b>Te sostiene en el impulso</b><span>Respiración guiada, tus motivos, un versículo y qué hacer en ese momento.</span></div></li>" +
+          "<li>" + icon("book") + "<div><b>Palabra de Dios cada día</b><span>Un versículo, una oración y un paso pequeño para hoy.</span></div></li>" +
+        "</ul>" +
+        '<figure class="verse welcome-verse">' + verseHtml(VERSES[2]) + "</figure></section>";
       return;
     }
     if (!S.loaded) { el.innerHTML = '<p class="notice">Cargando…</p>'; return; }
@@ -165,8 +237,10 @@
     var relapses = relapseTimes().length;
     var best = split(bestStreakMs()).days;
 
-    $("app").innerHTML =
-      '<section class="hero">' +
+    var curDays = split(Date.now() - currentStart()).days;
+
+    $("app").innerHTML = '<div class="dash">' +
+      '<section class="hero d-hero">' +
         brokenChain(false) +
         '<h1 class="count"><span class="num" id="cNum">0</span><span class="unit" id="cUnit">días</span></h1>' +
         '<p class="free">' + icon("link") + "libre de porno y masturbación</p>" +
@@ -174,26 +248,74 @@
         '<div class="goal"><div class="goal-head"><span id="gText"></span><span id="gLeft"></span></div>' +
         '<div class="track"><span id="gBar"></span></div></div>' +
         '<button class="sos-btn" type="button" data-action="sos">' + icon("wave") + "Tengo un impulso</button>" +
-        '<div class="quick"><button class="btn" type="button" data-action="urge">Registrar impulso</button>' +
+        '<div class="quick"><button class="btn" type="button" data-action="urge">' + icon("check") + "Superé un impulso</button>" +
         '<button class="btn ghost" type="button" data-action="relapse">Tuve una recaída</button></div>' +
+        '<p class="hero-help">¿Sientes ganas ahora? Pulsa <b>Tengo un impulso</b>. ¿Ya pasó y lo venciste? Anótalo en <b>Superé un impulso</b>.</p>' +
       "</section>" +
 
-      '<section class="panel"><div class="panel-head"><h2>Mis motivos</h2>' +
-        '<button class="link" type="button" data-action="reasons">' + (reasons.length ? "Editar" : "Agregar") + "</button></div>" +
-        (reasons.length ? '<ul class="reasons">' + reasons.map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + "</ul>"
+      renderFaith() +
+
+      '<div class="d-main">' +
+      panel("motivos", "heart", "Mis motivos", "Por qué lo haces. Te los muestro cuando pulsas «Tengo un impulso».",
+        '<button class="link" type="button" data-action="reasons">' + (reasons.length ? "Editar" : "Agregar") + "</button>",
+        reasons.length ? '<ul class="reasons">' + reasons.map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + "</ul>"
           : '<p class="notice">Escribe por qué quieres dejarlo. Te los mostraré cuando llegue un impulso.</p>') +
-      "</section>" +
 
-      '<section class="panel"><h2>Tu progreso</h2><dl class="facts">' +
-        "<div><dt>" + plural(best, "día de mejor racha", "días de mejor racha") + "</dt><dd>" + best + "</dd></div>" +
-        "<div><dt>" + plural(urges, "impulso superado", "impulsos superados") + "</dt><dd>" + urges + "</dd></div>" +
-        "<div><dt>" + plural(relapses, "recaída", "recaídas") + "</dt><dd>" + relapses + "</dd></div>" +
-      "</dl></section>" +
+      panel("progreso", "chart", "Tu progreso", "Tus números desde que empezaste y las metas que ya rompiste.", "",
+        '<dl class="facts">' +
+          "<div><dt>" + plural(best, "día de mejor racha", "días de mejor racha") + "</dt><dd>" + best + "</dd></div>" +
+          "<div><dt>" + plural(urges, "impulso superado", "impulsos superados") + "</dt><dd>" + urges + "</dd></div>" +
+          "<div><dt>" + plural(relapses, "recaída", "recaídas") + "</dt><dd>" + relapses + "</dd></div>" +
+        "</dl>" + renderGoals(best, curDays)) +
 
       renderPatterns() +
-      renderHistory();
+      renderHistory() +
+      "</div></div>";
 
     updateCounter();
+  }
+
+  function panel(id, ic, title, sub, action, body, cls) {
+    return '<section class="panel' + (cls ? " " + cls : "") + '" id="' + id + '" aria-labelledby="h-' + id + '">' +
+      '<div class="panel-head"><div class="ph-t"><h2 id="h-' + id + '">' + icon(ic) + title + "</h2>" +
+      (sub ? '<p class="panel-sub">' + sub + "</p>" : "") + "</div>" + (action || "") + "</div>" + body + "</section>";
+  }
+
+  // Metas: cada una es un eslabón. Dorado = ya lo lograste alguna vez (mejor racha); punteado = la siguiente.
+  function renderGoals(bestDays, curDays) {
+    var next = milestoneFor(curDays).next;
+    var list = MILESTONES.filter(function (m) { return m <= 365 || m <= bestDays || m === next; });
+    return '<p class="subhead">Metas</p><ol class="goals">' + list.map(function (m) {
+      var got = bestDays >= m, isNext = m === next && !got;
+      var name = MNAMES[m] || plural(m, "día", "días");
+      return '<li class="' + (got ? "got" : isNext ? "next" : "") + '" title="' + m + " " + plural(m, "día", "días") + (got ? " · logrado" : isNext ? " · próxima meta" : "") + '">' +
+        '<span class="g-num">' + m + '</span><span class="g-lbl">' + name + "</span></li>";
+    }).join("") + "</ol>";
+  }
+
+  // ---------- Fe: versículo, oración y paso del día ----------
+  function dayIndex() { var d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+  function todayKey() { return "x-hoy-" + dayIndex(); }
+  function verseHtml(v) {
+    return "<blockquote>" + esc(v.t) + '</blockquote><figcaption><span class="ref">' + esc(v.r) + '</span><span class="ver">RVR1960</span></figcaption>';
+  }
+  var verseOff = 0;
+  function currentVerse() { return VERSES[(dayIndex() + verseOff) % VERSES.length]; }
+  function todayDone() { try { return localStorage.getItem(todayKey()) === "1"; } catch (e) { return false; } }
+  function todayBtn(done) {
+    return '<button class="btn today-btn" type="button" data-action="today-done" aria-pressed="' + done + '">' + icon("check") + (done ? "¡Hecho hoy!" : "Marcar como hecho") + "</button>";
+  }
+  function renderFaith() {
+    var day = dayIndex();
+    return '<aside class="faith" aria-label="Para pensar en Dios">' +
+      panel("versiculo", "book", "Versículo del día", "Palabra para hoy. Léela despacio.",
+        '<button class="link" type="button" data-action="verse-next">Otro</button>',
+        '<figure class="verse" id="verseBox">' + verseHtml(currentVerse()) + "</figure>", "verse-card") +
+      panel("oracion", "cross", "Oración", "Para empezar el día o cuando lo necesites.", "",
+        '<p class="prayer">' + esc(PRAYERS[day % PRAYERS.length]) + "</p>") +
+      panel("hoy", "check", "Para hoy", "Un paso pequeño que te acerca a Dios y te aleja del hábito.", "",
+        '<p class="today-text">' + esc(TODAY[day % TODAY.length]) + '</p><div id="todayBox">' + todayBtn(todayDone()) + "</div>") +
+      "</aside>";
   }
 
   function updateCounter() {
@@ -214,9 +336,9 @@
   function renderPatterns() {
     var since = Date.now() - 30 * 864e5;
     var recent = S.events.filter(function (e) { return Date.parse(e.at) >= since; });
-    var h = '<section class="panel"><h2>Tus patrones</h2>';
+    var P = function (body) { return panel("patrones", "clock", "Tus patrones", "Cuándo y por qué aparecen tus impulsos (últimos 30 días).", "", body); };
     if (recent.length < 3) {
-      return h + '<p class="notice">Registra tus impulsos (y si pasa, tus recaídas). Con unos pocos registros aquí verás a qué hora aparecen y qué los provoca.</p></section>';
+      return P('<p class="notice">Registra tus impulsos (y si pasa, tus recaídas). Con unos pocos registros aquí verás a qué hora aparecen y qué los provoca.</p>');
     }
     var byMoment = MOMENTS.map(function (m) {
       return { label: m.label, key: m.key, n: recent.filter(function (e) { var hr = new Date(e.at).getHours(); return hr >= m.from && hr < m.to; }).length };
@@ -246,18 +368,17 @@
           '<span class="bar"><span style="width:' + (x.n / max * 100) + '%"></span></span><span class="val">' + x.n + "</span></div>";
       }).join("") + "</div>";
     }
-    return h + '<p class="insight">' + insight + "</p>" +
+    return P('<p class="insight">' + insight + "</p>" +
       '<p class="subhead">Momento del día</p>' + bars(byMoment) +
       (trigList.length ? '<p class="subhead">Qué lo provoca</p>' + bars(trigList) : "") +
-      (hasWhat ? '<p class="subhead">Hacia qué</p>' + bars(whatList) : "") +
-      "</section>";
+      (hasWhat ? '<p class="subhead">Hacia qué</p>' + bars(whatList) : ""));
   }
 
   function renderHistory() {
     var list = S.events.slice(0, 20);
-    var h = '<section class="panel"><h2>Historial</h2>';
-    if (!list.length) return h + '<p class="notice">Aún no hay registros. Cada impulso que superes aparecerá aquí.</p></section>';
-    return h + '<ul class="history">' + list.map(function (e) {
+    var H = function (body) { return panel("historial", "list", "Historial", "Tus últimos registros. Dorado: impulso vencido · Naranja: recaída.", "", body); };
+    if (!list.length) return H('<p class="notice">Aún no hay registros. Cada impulso que superes aparecerá aquí.</p>');
+    return H('<ul class="history">' + list.map(function (e) {
       var relapse = e.kind === "relapse";
       var meta = [fmtWhen(Date.parse(e.at))];
       var w = whatLabel(e.what);
@@ -270,7 +391,7 @@
         '<div class="meta">' + esc(meta.join(" · ")) + "</div>" +
         (e.note ? '<p class="note">' + esc(e.note) + "</p>" : "") + "</div>" +
         '<button class="del' + (armed ? " armed" : "") + '" type="button" data-del="' + esc(e.id) + '">' + (armed ? "¿Eliminar? Toca otra vez" : "Eliminar") + "</button></li>";
-    }).join("") + "</ul></section>";
+    }).join("") + "</ul>");
   }
 
   // ---------- Datos ----------
@@ -415,7 +536,9 @@
         '<div class="actions"><button class="btn calm" type="submit">Guardar</button></div>';
     } else if (kind === "relapse") {
       title = "Tuve una recaída";
-      body = '<div class="calm-box">Pasa, y no borra lo que avanzaste: tu mejor racha y tu historial se quedan. Lo que importa ahora es entender qué pasó y volver a empezar.</div>' +
+      body = '<div class="calm-box">Pasa, y no borra lo que avanzaste: tu mejor racha y tu historial se quedan. Lo que importa ahora es entender qué pasó, pedirle perdón a Dios y volver a empezar.' +
+          '<p class="cb-verse">«Si confesamos nuestros pecados, él es fiel y justo para perdonar nuestros pecados, y limpiarnos de toda maldad.» <span>1 Juan 1:9</span></p>' +
+          '<p class="cb-verse">«Porque siete veces cae el justo, y vuelve a levantarse.» <span>Proverbios 24:16</span></p></div>' +
         '<div class="field"><span class="lbl">¿Qué pasó?</span>' + whatChips() + '<span class="hint">Marca una o las dos. Cualquiera reinicia el contador.</span></div>' +
         '<div class="field"><label for="fAt">¿Cuándo fue?</label><input id="fAt" type="datetime-local" value="' + localInputValue(Date.now()) + '" max="' + localInputValue(Date.now()) + '"></div>' +
         '<div class="field"><span class="lbl">¿Qué lo provocó?</span>' + chipsHtml(TRIGGERS, "triggers") + "</div>" +
@@ -527,6 +650,10 @@
     showReason();
     sosT.reason = setInterval(showReason, 15000);
 
+    var tv = shuffle(VERSES.filter(function (v) { return v.tempt; }))[0];
+    $("sosVerseText").textContent = tv.t;
+    $("sosVerseRef").textContent = tv.r + " · RVR1960";
+
     var circle = $("breathCircle"), text = $("breathText"), step = 0;
     function breathe() {
       var p = BREATH[step % BREATH.length];
@@ -607,6 +734,16 @@
         }
         break;
       case "reason-remove": t.closest(".reason-row").remove(); break;
+      case "verse-next":
+        verseOff = (verseOff + 1) % VERSES.length;
+        if ($("verseBox")) $("verseBox").innerHTML = verseHtml(currentVerse());
+        break;
+      case "today-done":
+        var done = !todayDone();
+        try { if (done) localStorage.setItem(todayKey(), "1"); else localStorage.removeItem(todayKey()); } catch (err) { /* sin almacenamiento: solo visual */ }
+        $("todayBox").innerHTML = todayBtn(done);
+        if (done) toast("¡Bien! Un paso más hacia la libertad.");
+        break;
     }
   });
   document.addEventListener("change", function (e) {
